@@ -16,6 +16,10 @@ mongoose
   .catch((err) => console.error("MongoDB connection error:", err));
 
 // Routes
+app.get("/", (req, res) => {
+  res.send("Welcome to the Book Review API!");
+});
+
 app.use("/api/auth", require("./routes/authRoutes"));
 app.use("/api/reviews", require("./routes/reviewRoutes"));
 app.use("/api/users", require("./routes/userRoutes"));
