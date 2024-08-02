@@ -1,12 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import { TextField, Button, Box, Typography } from "@mui/material";
 import { useForm } from "react-hook-form";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
-import { addReview } from "../../services/reviewService"; // Import the service
+import { addReview } from "../../services/reviewService";
 
 const AddReviewForm = () => {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false); // Loading state
   const {
     register,
     handleSubmit,
@@ -15,6 +16,8 @@ const AddReviewForm = () => {
 
   const onSubmit = async (data) => {
     const token = localStorage.getItem("token");
+
+    setLoading(true); // Set loading state to true
 
     try {
       await addReview(data, token);
@@ -25,6 +28,7 @@ const AddReviewForm = () => {
         icon: "success",
         confirmButtonText: "OK",
       });
+
       navigate("/");
     } catch (error) {
       Swal.fire({
@@ -33,6 +37,8 @@ const AddReviewForm = () => {
         icon: "error",
         confirmButtonText: "OK",
       });
+    } finally {
+      setLoading(false); // Set loading state to false
     }
   };
 
@@ -89,8 +95,9 @@ const AddReviewForm = () => {
           variant="contained"
           color="primary"
           sx={{ mt: 2, width: { xs: "100%", md: "50%" } }}
+          disabled={loading} // Disable button when loading
         >
-          Submit Review
+          {loading ? "Submitting..." : "Submit Review"}
         </Button>
       </form>
     </Box>

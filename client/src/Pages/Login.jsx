@@ -30,8 +30,7 @@ const Login = () => {
   const onSubmit = async (data) => {
     try {
       const { token, user } = await loginUser(data.email, data.password);
-      login(token, user);
-
+      await login(token, user);
       Swal.fire({
         icon: "success",
         title: "Login Successful",

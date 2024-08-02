@@ -7,6 +7,7 @@ const apiUrl = process.env.REACT_APP_API_URL;
 
 export const AuthProvider = ({ children }) => {
   const [auth, setAuth] = useState({ token: null, user: null });
+  const [loading, setLoading] = useState(true); // Add loading state
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -17,30 +18,33 @@ export const AuthProvider = ({ children }) => {
           headers: { Authorization: `Bearer ${token}` },
         })
         .then((response) => {
-          console.log("res", response.data);
           setAuth({ token, user: response.data });
         })
         .catch(() => {
           setAuth({ token: null, user: null });
+        })
+        .finally(() => {
+          setLoading(false);
         });
+    } else {
+      setLoading(false);
     }
   }, []);
 
   const login = (token, user) => {
     localStorage.setItem("token", token);
     setAuth({ token: token, user: user });
-    console.log(user);
     navigate("/");
   };
 
   const logout = () => {
     localStorage.removeItem("token");
     setAuth({ token: null, user: null });
-    navigate("/login");
+    navigate("/");
   };
 
   return (
-    <AuthContext.Provider value={{ auth, login, logout }}>
+    <AuthContext.Provider value={{ auth, loading, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

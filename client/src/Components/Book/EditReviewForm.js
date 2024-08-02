@@ -21,7 +21,7 @@ const EditReviewForm = () => {
   useEffect(() => {
     const loadReview = async () => {
       try {
-        const review = await fetchReviewById(id, auth?.token);
+        const review = await fetchReviewById(id);
         // Set form values with fetched data
         setValue("bookTitle", review.bookTitle);
         setValue("author", review.author);
@@ -39,7 +39,7 @@ const EditReviewForm = () => {
 
   const onSubmit = async (data) => {
     try {
-      await updateReview(id, data, auth?.token);
+      await updateReview(id, data);
       Swal.fire({
         title: "Success!",
         text: "Review updated successfully.",

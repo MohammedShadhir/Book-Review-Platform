@@ -7,12 +7,14 @@ import BookCard from "../Card/BookCard";
 
 const BookReviewsList = () => {
   const { auth } = useAuth();
+  const [userId, setUserId] = useState("");
   const [reviews, setReviews] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredReviews, setFilteredReviews] = useState([]);
 
   const loadReviews = async () => {
     try {
+      setUserId(auth.user && auth.user.id);
       const allReviews = await fetchUserReviews();
       setReviews(allReviews);
       setFilteredReviews(allReviews);
@@ -77,7 +79,11 @@ const BookReviewsList = () => {
           {filteredReviews.length > 0 ? (
             filteredReviews.map((book) => (
               <Grid item xs={12} sm={5} md={4} key={book._id}>
-                <BookCard book={book} onDelete={handleDelete} />
+                <BookCard
+                  book={book}
+                  onDelete={handleDelete}
+                  currentUser={userId}
+                />
               </Grid>
             ))
           ) : (

@@ -1,4 +1,7 @@
 import React from "react";
+import { useAuth } from "../../context/AuthContext";
+import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 import {
   Card,
   CardContent,
@@ -12,16 +15,16 @@ import Rating from "@mui/material/Rating";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ReviewIcon from "@mui/icons-material/RateReview";
-import { useAuth } from "../../context/AuthContext";
-import { useNavigate } from "react-router-dom";
-import Swal from "sweetalert2";
 
-const BookCard = ({ book, onDelete }) => {
-  const { auth } = useAuth();
+const BookCard = ({ book, onDelete, currentUser }) => {
+  const { loading } = useAuth();
   const navigate = useNavigate();
 
+  if (loading) {
+    return <div>Loading...</div>; // Or any other loading indicator
+  }
+
   const handleEdit = (id) => {
-    console.log("Edit book with id:", id);
     navigate(`/editReview/${id}`);
   };
 
@@ -41,17 +44,12 @@ const BookCard = ({ book, onDelete }) => {
       confirmButtonText: "Close",
       confirmButtonColor: "#3085d6",
       background: "#fff",
-      customClass: {
-        title: "swal2-title",
-        htmlContainer: "swal2-html-container",
-        confirmButton: "swal2-confirm",
-      },
       width: "70%",
       padding: "20px",
     });
   };
 
-  const canEditOrDelete = auth.user && auth.user._id === book.user._id;
+  const canEditOrDelete = currentUser === book.user._id;
 
   return (
     <Card
@@ -111,9 +109,6 @@ const BookCard = ({ book, onDelete }) => {
         <IconButton color="info" onClick={() => handleReadMore()}>
           <ReviewIcon />
         </IconButton>
-        {/* <Button onClick={() => handleReadMore()} sx={{ ml: 2 }}>
-          {expanded ? "Read Less" : "Read More"}
-        </Button> */}
       </CardActions>
     </Card>
   );
