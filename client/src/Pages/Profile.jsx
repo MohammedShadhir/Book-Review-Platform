@@ -37,7 +37,7 @@ const Profile = () => {
     if (auth.user) {
       console.log(auth.user);
       setUser({ userName: auth.user.username, email: auth.user.email });
-      setValue("username", auth.user.userName);
+      setValue("username", auth.user.username);
       setValue("email", auth.user.email);
     }
   }, [auth, setValue]);
