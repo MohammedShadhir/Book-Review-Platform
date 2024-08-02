@@ -35,7 +35,8 @@ const Profile = () => {
 
   useEffect(() => {
     if (auth.user) {
-      setUser({ userName: auth.user.userName, email: auth.user.email });
+      console.log(auth.user);
+      setUser({ userName: auth.user.username, email: auth.user.email });
       setValue("username", auth.user.userName);
       setValue("email", auth.user.email);
     }
